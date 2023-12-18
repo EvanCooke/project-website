@@ -118,11 +118,33 @@ if st.button('Identify Digit'):
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
 
-# Section 2: Handwritten Digit Identifier
+# Section 3: Snake AI
 st.markdown("## Deep Q Learning Snake AI")
 
 # Display the image
 st.image("snake-ai-picture.PNG")
+
+st.markdown("<a href='https://github.com/EvanCooke/deep-q-learning-snake-ai'>Source Code</a>", unsafe_allow_html=True)
+
+# Add a horizontal line
+st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
+
+# Section 4: Buyer Classifier
+text = """
+Using Python and Scikit-Learn's logistic regression algorithm to develop a classification model,
+this model predicts whether a visitor to an online store will make a purchase or not, providing valuable insights into customer behavior. 
+By understanding the circumstances under which customers make purchase decisions, businesses can tailor their marketing strategies more effectively. 
+"""
+
+st.markdown("## Implemented a machine learning model to predict the purchase intentions of online shoppers")
+st.markdown(text)
+
+st.markdown('### Model Evaluation:')
+st.image('buyer-classifier-model-stats.PNG')
+st.markdown('### Feature Importance:')
+st.image("feature-importance.PNG")
+st.markdown('### Feature Correlation Heatmap:')
+st.image("heatmap.PNG")
 
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
