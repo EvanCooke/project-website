@@ -50,6 +50,9 @@ def load_model():
 
 handwritten_model = load_model()
 
+# load the sentiment classifier model
+sentiment_classifier_model = pickle.load(open('simple-sentiment-classifier-model.pkl', 'rb'))
+
 st.title("My Machine Learning Projects")
 
 # Add a horizontal line
@@ -59,9 +62,9 @@ st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
 st.markdown("## Email/SMS Spam Classifier")
 st.markdown("Enter the message you want to classify as spam or not spam.")
 
-input_sms = st.text_area("")
+input_sms = st.text_area("", key=4)
 
-if st.button('Predict Spam'):
+if st.button('Predict Spam', key=1):
 
     # 1. preprocess
     transformed_sms = transform_text(input_sms)
@@ -101,7 +104,7 @@ canvas_result = st_canvas(
 #     st.write("Rescaled image")
 #     st.image(rescaled)
 
-if st.button('Identify Digit'):
+if st.button('Identify Digit', key=2):
     # img = cv2.resize(canvas_result.image_data.astype('uint8'), (28, 28))
     img = canvas_result.image_data.astype('uint8') # Get the image data from the canvas (this is already a NumPy array)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # Convert the image to grayscale
@@ -122,7 +125,8 @@ st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
 st.markdown("## Deep Q Learning Snake AI")
 
 # Display the image
-st.image("snake-ai-picture.PNG")
+#st.image("snake-ai-picture.PNG")
+st.image("snake-ai-gif.gif")
 
 st.markdown("<a href='https://github.com/EvanCooke/deep-q-learning-snake-ai'>Source Code</a>", unsafe_allow_html=True)
 
@@ -136,7 +140,7 @@ this model predicts whether a visitor to an online store will make a purchase or
 By understanding the circumstances under which customers make purchase decisions, businesses can tailor their marketing strategies more effectively. 
 """
 
-st.markdown("## Implemented a machine learning model to predict the purchase intentions of online shoppers")
+st.markdown("## Implemented a logistic regression model to predict the purchase intentions of online shoppers")
 st.markdown(text)
 
 st.markdown('### Model Evaluation:')
@@ -145,6 +149,30 @@ st.markdown('### Feature Importance:')
 st.image("feature-importance.PNG")
 st.markdown('### Feature Correlation Heatmap:')
 st.image("heatmap.PNG")
+
+# Add a horizontal line
+st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
+
+# Section 5: Sentiment Classifier
+st.markdown("## Simple Sentiment Classifier")
+st.markdown("Enter the message you want to classify as happy, sad, or neutral.")
+
+input_sentiment_msg = st.text_area("", key=5)
+
+if st.button('Predict Sentiment', key=3):
+
+    # 1. predict
+    sentiment_result = sentiment_classifier_model.predict([input_sentiment_msg])[0]
+    # 2. Display
+    if sentiment_result == 1:
+        st.header("**Result: Negative**")
+    elif sentiment_result == 2:
+        st.header("**Result: Neutral**")
+    elif sentiment_result == 3:
+        st.header("**Result: Positive**")
+    else:
+        st.header("**Error, try again.**")
+
 
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
