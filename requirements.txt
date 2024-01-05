@@ -4,3 +4,5 @@ scikit-learn
 torch
 streamlit-drawable-canvas
 tensorflow
+cv2
+numpy
