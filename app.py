@@ -8,12 +8,41 @@ from streamlit_drawable_canvas import st_canvas
 import tensorflow as tf
 import cv2
 import numpy as np
+import spacy
+
+# Load English tokenizer
+nlp = spacy.load("en_core_web_sm")
 
 ps = PorterStemmer()
 
+# def transform_text(text):
+#     text = text.lower()
+#     text = nltk.word_tokenize(text)
+
+#     y = []
+#     for i in text:
+#         if i.isalnum():
+#             y.append(i)
+
+#     text = y[:]
+#     y.clear()
+
+#     for i in text:
+#         if i not in stopwords.words('english') and i not in string.punctuation:
+#             y.append(i)
+
+#     text = y[:]
+#     y.clear()
+
+#     for i in text:
+#         y.append(ps.stem(i))
+
+#     return " ".join(y)
+
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    doc = nlp(text)
+    text = [token.text for token in doc]
 
     y = []
     for i in text:
@@ -58,25 +87,25 @@ st.title("My Machine Learning Projects")
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
 
-# Section 1: Email/SMS Spam Classifier
-st.markdown("## Email/SMS Spam Classifier")
-st.markdown("Enter the message you want to classify as spam or not spam.")
+# Section 5: Sentiment Classifier
+st.markdown("## Simple Sentiment Classifier")
+st.markdown("Enter the message you want to classify as happy, sad, or neutral.")
 
-input_sms = st.text_area("", key=4)
+input_sentiment_msg = st.text_area("", key=5)
 
-if st.button('Predict Spam', key=1):
+if st.button('Predict Sentiment', key=3):
 
-    # 1. preprocess
-    transformed_sms = transform_text(input_sms)
-    # 2. vectorize
-    vector_input = tfidf.transform([transformed_sms])
-    # 3. predict
-    result = model.predict(vector_input)[0]
-    # 4. Display
-    if result == 1:
-        st.header("**Result: Spam**")
+    # 1. predict
+    sentiment_result = sentiment_classifier_model.predict([input_sentiment_msg])[0]
+    # 2. Display
+    if sentiment_result == 1:
+        st.header("**Result: Negative**")
+    elif sentiment_result == 2:
+        st.header("**Result: Neutral**")
+    elif sentiment_result == 3:
+        st.header("**Result: Positive**")
     else:
-        st.header("**Result: Not Spam**")
+        st.header("**Error, try again.**")
 
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
@@ -153,26 +182,26 @@ st.image("heatmap.PNG")
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
 
-# Section 5: Sentiment Classifier
-st.markdown("## Simple Sentiment Classifier")
-st.markdown("Enter the message you want to classify as happy, sad, or neutral.")
 
-input_sentiment_msg = st.text_area("", key=5)
+# Section 1: Email/SMS Spam Classifier
+st.markdown("## Email/SMS Spam Classifier")
+st.markdown("Enter the message you want to classify as spam or not spam.")
 
-if st.button('Predict Sentiment', key=3):
+input_sms = st.text_area("", key=4)
 
-    # 1. predict
-    sentiment_result = sentiment_classifier_model.predict([input_sentiment_msg])[0]
-    # 2. Display
-    if sentiment_result == 1:
-        st.header("**Result: Negative**")
-    elif sentiment_result == 2:
-        st.header("**Result: Neutral**")
-    elif sentiment_result == 3:
-        st.header("**Result: Positive**")
+if st.button('Predict Spam', key=1):
+
+    # 1. preprocess
+    transformed_sms = transform_text(input_sms)
+    # 2. vectorize
+    vector_input = tfidf.transform([transformed_sms])
+    # 3. predict
+    result = model.predict(vector_input)[0]
+    # 4. Display
+    if result == 1:
+        st.header("**Result: Spam**")
     else:
-        st.header("**Error, try again.**")
-
+        st.header("**Result: Not Spam**")
 
 # Add a horizontal line
 st.markdown('<hr style="border:1px solid black">', unsafe_allow_html=True)
