@@ -8,41 +8,12 @@ from streamlit_drawable_canvas import st_canvas
 import tensorflow as tf
 import cv2
 import numpy as np
-import spacy
-
-# Load English tokenizer
-nlp = spacy.load("en_core_web_sm")
 
 ps = PorterStemmer()
 
-# def transform_text(text):
-#     text = text.lower()
-#     text = nltk.word_tokenize(text)
-
-#     y = []
-#     for i in text:
-#         if i.isalnum():
-#             y.append(i)
-
-#     text = y[:]
-#     y.clear()
-
-#     for i in text:
-#         if i not in stopwords.words('english') and i not in string.punctuation:
-#             y.append(i)
-
-#     text = y[:]
-#     y.clear()
-
-#     for i in text:
-#         y.append(ps.stem(i))
-
-#     return " ".join(y)
-
 def transform_text(text):
     text = text.lower()
-    doc = nlp(text)
-    text = [token.text for token in doc]
+    text = nltk.word_tokenize(text)
 
     y = []
     for i in text:
@@ -63,6 +34,17 @@ def transform_text(text):
         y.append(ps.stem(i))
 
     return " ".join(y)
+
+def download_nltk_resources():
+    resources = ["punkt", "stopwords"]
+    for resource in resources:
+        try:
+            nltk.data.find(f"corpora/{resource}")
+        except LookupError:
+            nltk.download(resource)
+
+# Download necessary NLTK resources at the start of your app
+download_nltk_resources()
 
 # load sms spam classifier model
 tfidf = pickle.load(open('vectorizer.pkl','rb'))

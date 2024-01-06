@@ -6,4 +6,3 @@ streamlit-drawable-canvas
 tensorflow
 opencv-python
 numpy
-spacy
