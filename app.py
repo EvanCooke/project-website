@@ -8,6 +8,7 @@ from streamlit_drawable_canvas import st_canvas
 import tensorflow as tf
 import cv2
 import numpy as np
+from keras.layers import TFSMLayer
 
 ps = PorterStemmer()
 
@@ -56,7 +57,7 @@ model = pickle.load(open('model.pkl','rb'))
 # load handwritten model
 @st.cache_resource
 def load_model():
-    handwritten_model = tf.keras.models.load_model('handwritten.model')
+    handwritten_model = tf.saved_model.load('handwritten.model')
     return handwritten_model
 
 handwritten_model = load_model()
@@ -122,10 +123,14 @@ if st.button('Identify Digit', key=2):
     img = cv2.resize(img, (28, 28)) # Resize the image to 28x28 pixels
     img = img / 255.0 # Normalize the pixel values to [0, 1]
     img = 1 - img # Invert the normalized image to get white digit on black background
+    img = img.astype('float32') # Convert the image data to float32
+
     img = img.reshape(1, 28, 28) # Reshape the image data for prediction
     
     # Predict the digit
-    val = handwritten_model.predict(img)
+    # val = handwritten_model.predict(img, training=False)
+    val = handwritten_model(img, training=False)
+
     
     st.write(f"**Result: {np.argmax(val[0])}**")
 
